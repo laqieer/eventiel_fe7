@@ -1,0 +1,42 @@
+Missing Classes:
+Valkyrie
+Priest (Enemy, NPC)
+Berserker
+Civilian
+Transporter - Tent
+Civilian_2
+Civilian_2_F
+Child
+Peer
+Peer_F
+Prince
+Queen
+HungLeila
+Corsair
+Prince_Tactician
+FallenPrince
+Princefacingupward
+FallenNinian
+FallenIceDragon
+FallenWarrior
+Child_2
+Child_2_F
+UberSage
+ArcherinBallista
+ArcherinIronBallista
+ArcherinKillerBallista
+EmptyBallista
+EmptyIronBallista
+EmptyKillerBallista
+
+
+
+Zhack
+Zombie
+Birdy
+Blight
+WSaint
+Pistoleer
+Pistoleer_F
+Trooper
+Trooper_F

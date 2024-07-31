@@ -1,0 +1,348 @@
+<!-- Forum Emblem Stuff -->
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+
+  <div style="position:fixed; top:0px; left:0px; display:none;" id="ForumEmblemMapDisplay">
+  	<!--
+	  <div id="ForumEmblemMap"
+		style="background: white;
+		width: 1300px;
+		height: 0px;
+		z-index:10;
+		position:absolute;
+		top: 0px;
+		left: 0px;
+		overflow-y:scroll;">
+		
+			
+	  <div id="hideMapDiv"
+		style="display:none;
+		position:relative;
+		background:white;
+		z-index:20;
+		top: 540px;
+		left: 1100px;
+		padding-left: 10px;
+		padding-right: 10px;
+		border: 2px solid;"
+		onclick="hideMap()">
+		
+			<h4>HIDE MAP</h4>
+			
+	  </div>
+	  
+	 </div>
+	 -->
+
+	  <div id="displayMapDiv"
+		style="position:fixed;
+		top: 0px;
+		left: 0px;
+		background:white;
+		padding-left: 10px;
+		padding-right: 10px;
+		border: 2px solid;
+		display: none;"
+		onclick="openMapInNewWindow()">
+		
+			<h4>DISPLAY MAP</h4>
+			
+	   </div>
+
+	 <div id="displayFEEditor"
+		style="position:fixed;
+		top: 0px;
+		left: 150px;
+		background:white;
+		padding-left: 10px;
+		padding-right: 10px;
+		border: 2px solid;
+		display: none;"
+		onclick="openEditorInNewWindow()">
+			<h4>EDITOR</h4>
+	   </div>
+	   
+	</div>
+	
+<!-- End Forum Emblem Stuff -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+   <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+	<script type="text/javascript" src="eventiel_selected_maps.js"></script>
+	<script type="text/javascript" src="eventiel_event_form_dict.js"></script>
+	<script type="text/javascript" src="eventiel_map_sprite_dict.js"></script>
+	<script type="text/javascript" src="eventiel_event_code_dictionary.js"></script>
+	<script type="text/javascript" src="FE7_Definitions.js"></script>
+	<script type="text/javascript" src="FE7_Chapters.js"></script>
+	<script type="text/javascript" src="FE7_Music.js"></script>
+	<script type="text/javascript" src="FE7_Backgrounds.js"></script>
+	<script type="text/javascript" src="FE7_Spells.js"></script>
+	<script type="text/javascript" src="Zhack_Definitions.js"></script>
+  <script type="text/javascript" src="eventiel_lite.js"></script>
+  <link href="style_eventiel_lite.css" rel="stylesheet" type="text/css">
+</head>
+
+<!-- When page loads, map image and FE7 definitions are loaded -->
+<body onload="setUp(getEventFormDictionary(), getSelectedMaps(), getFE7Definitions(), getZhackDefinitions(), getFE7Chapters(), getFE7Music(), getFE7Backgrounds(), getFE7Spells());">
+
+<!-- Loading screen mini-popup image -->
+<div id="loading" class="loading-invisible">
+  <img src="LoadingScreen.gif"></img>
+</div>
+
+<!-- Script for loading screen-->
+<script type="text/javascript">
+  document.getElementById("loading").className = "loading-visible";
+  var hideDiv = function(){document.getElementById("loading").className = "loading-invisible";};
+  var oldLoad = window.onload;
+  var newLoad = oldLoad ? function(){hideDiv.call(this);oldLoad.call(this);} : hideDiv;
+  window.onload = newLoad;
+</script>
+
+
+<!-- Unit Editor form -->
+<div id="unitEditorWrapper">
+
+<!-- Appears at the top of the Unit Editor form
+Allows user to manage unit blocks and choose what map clicks will do-->
+<form name="topUnitForm" id="topUnitForm">
+
+<!-- Determines what map clicks do-->
+<select name="sel_mapClickMode" onchange='setMapClickMode();' class="spaceRight" style="display:none">
+	<option>Add</option>
+	<option>Edit</option>
+	<option>Delete</option>
+</select>
+<select name="sel_chosenChapter" style="display:none" id="sel_chosenChapter" onchange="updateEventOutput();" class="spaceRight"></select>
+Chapter Map: <select name="mapSelection" class="MapChoices"></select> <input type="button" value="Load Selected Map" onclick="document.topUnitForm.removeEvents.checked = ''; toggleRemoveEvents(); loadSelectedMap();" class="spaceRight">
+<input type="hidden" name="mapImageFile" value="ChapterMaps/0.PNG" id="hiddenMap"/>
+<input type="checkbox" name="removeEvents" onclick="toggleRemoveEvents();">Remove events related to map.
+<hr>
+</form><br>
+
+<!-- Hidden inputs that keep track of unique ids -->
+<input type="hidden" value="0" id="unitId" />
+
+<!-- Unit Editor form -->
+<form name="unitEditorForm" class="editForm">
+<div id="unitNum">
+<input type="text" style="display:none" name="txt_unitNum" size="5" class="spaceRight" readonly>
+<input type="button" value="Done Editing" name="doneEditing" onclick="setSelectedOption('Add', document.topUnitForm.sel_mapClickMode); setMapClickMode();">
+<hr><br>
+</div>
+Character: <select name="sel_character" id="sel_character" class="Char"></select><br>
+Class: <select name="sel_class" id="sel_class" class="Classes" onchange='changeMapSprite();'></select><br>
+Level: <input size="2" maxlength="2" type="text" pattern="[0-9]*" name="txt_level" value="1"><br>
+Side: <select name="sel_side" onchange='changeMapSprite();'>
+<option>Ally</option>
+<option>Enemy</option>
+<option>NPC</option>
+</select>
+
+<!-- Changing unit's load/start position-->
+<input type="text" style="display:none" name="txt_load_x" value="0" size="2" maxlength="2" class="MapClickPos"
+		onclick="uncheck(document.unitEditorForm.rd_startPos);
+		document.unitEditorForm.rd_loadPos.checked = 'checked';" readonly>
+<input type="text" style="display:none" name="txt_load_y" value="0" size="2" maxlength="2" class="MapClickPos"
+		onclick="uncheck(document.unitEditorForm.rd_startPos);
+		document.unitEditorForm.rd_loadPos.checked = 'checked';" readonly>
+
+<!-- Items in unit's inventory -->
+<p>Item 1: <select name="sel_item1" id="sel_item1" class="ItemOptions"></select></p>
+<p>Item 2: <select name="sel_item2" id="sel_item2" class="ItemOptions"></select></p>
+<p>Item 3: <select name="sel_item3" id="sel_item3" class="ItemOptions"></select></p>
+<p>Item 4: <select name="sel_item4" id="sel_item4" class="ItemOptions"></select></p>
+
+<!-- Unit's AI -->
+<p><select name="AI">
+	<option>NoAI</option>
+	<option>PursueWithoutHeed</option>
+	<option>Guard</option>
+	<option>AttackInRange</option>
+	<option>DestroyVillages</option>
+	<option>HealUnits</option>
+	<option>StealFromUnits</option>
+	<option>StealFromChests</option>
+	<option>TalkToLord</option>
+	<option>AttackWall</option>
+	<option>SeizeThrone</option>
+</select><br></p>
+
+<!-- Buttons for adding and editing units-->
+<input type="button" name="btn_addUnit" value="Add Unit" class="spaceRight" onclick="addUnit(getMapSpriteDict());" disabled = "disabled">
+<input type="button" name="btn_editUnit" value="Edit Unit" onclick="editUnit(getMapSpriteDict());" disabled = "disabled">
+
+</form>
+</div>
+
+<!-- Map stuff on the right
+     This holds the mage image and map selection form together-->
+<div id="mapWrapper">
+<!-- Holds all the images loaded onto the map, like the load and start pointer and unit sprites-->
+<div id="mapImagesDiv" class="ImageHolder">
+<!-- Gets information from the map clicks-->
+<div id="mapClickDiv" onclick="getMapCoord(event);">
+<!-- Canvas is where the actual map image is loaded-->
+<canvas id="mapCanvas">
+Your browser does not support the canvas element.<br>
+Try using Firefox.
+</canvas>
+</div>
+
+<!-- Load and start position pointers-->
+<div id="unitPointerImgDiv">
+<img src="MapPointers/StartPointer.png" id="LoadPointer" class="unitImg" onclick="setLoadCoord(-2);">
+</div>
+<div id="eventPointerImgDiv">
+<div id="genEventImgDiv">
+<img src="MapPointers/StartPointer.png" id="GenPointer" class="unitImg" onclick="getMapCoord(event);">
+<img src="MapPointers/CAMPointer.png" id="CAMPointer" class="unitImg" onclick="getMapCoord(event);">
+</div>
+<div id="manualMoveImgDiv">
+<img src="MapPointers/ManualMoveStartPointer.png" id="ManualMoveStartPointer" class="unitImg" onclick="getMapCoord(event);">
+<img src="MapPointers/ManualMoveEndPointer.png" id="ManualMoveEndPointer" class="unitImg" onclick="getMapCoord(event);">
+</div>
+</div>
+
+</div>
+
+<!-- Choosing the map to use-->
+<div class="mapSelect">
+<!-- Last click position-->
+<form name="mapClickPosForm" id="mapClickPosForm">
+X: <input type="text" name="txt_mouseX" class="MapClickPos" value="0" size="4" readonly>  
+Y: <input type="text" name="txt_mouseY" class="MapClickPos" value="0" size="4" readonly><br>
+</form>
+</div>
+</div>
+
+<!-- Unit block text output -->
+<div id="unitBlockDiv" class="outDisplay" style="display:none">
+<div id="unitBlock0">
+<div id="b_name0" class="b_name">Good:<a href="javascript:toggleBlock(0);">
+<img src="BlockIcons/Minimize.png" id="minMaxImg0" class="minMaxImg">
+</a>
+<a href="javascript:toggleInvisibleUnits(0);">
+<img src="BlockIcons/Visible.png" id="visImg0" class="minMaxImg">
+</a>
+</div>
+<div id="b_list0"> </div>
+<div id="b_end0">UNIT</div>
+</div>
+</div>
+
+<!-- Event Writer Output-->
+<div class="outDisplay" style="margin-bottom:0px"><h2>Output Code:</h2></div>
+<textarea id="txa_eventOutput" rows="20" cols="50">
+<<</textarea>
+
+
+<!-- To prevent the page from collasping on itself (due to all those floating divs) -->
+<div style="clear:both;"> </div>
+
+
+</body>
+</html>
+
+<script type="text/javascript">
+// By VoidPC
+var redirectImage = "<img src='http://voidpc.b1.jcink.com/uploads/voidpc/redirectpostimage.gif' />";
+if(location.href.match(/act=Post&CODE=06/i)){
+var Post = document.REPLIER.Post;
+if(Post.value.match(/\[(QUOTE)\=(.+?)\](.+)\[\/\1\]/i)){
+Post.value = "[QUOTE=" + RegExp.$2 + ", {" + location.href.split('&t=')[1].split('&')[0] + "|" + location.href.split('&p=')[1] + "} ]" + RegExp.$3 + "[/QUOTE]";
+}}
+if(document.getElementById('QUOTE')){
+for(var i = 0, a = document.getElementsByTagName('B'), b = a.length; i < b; i++){
+if(a[i].parentNode.tagName == "TD" && a[i].innerHTML == "QUOTE" && a[i].parentNode.innerHTML.match(/\{(.*?)\}/i)){
+var d = RegExp.$1.split('|');
+a[i].parentNode.innerHTML = a[i].parentNode.innerHTML.replace("{" + RegExp.$1 + "}", "<a href='index.php?showtopic=" + d[0] + "&view=findpost&p=" + d[1] + "'>" + redirectImage + "</a>");
+}}}
+</script>
+<script type="text/javascript">
+	// By VoidPC
+	if(add_sent = document.getElementsByName('add_sent')[0]) add_sent.checked = "true";
+	</script>
+<script type='text/javascript'>
+//Fast Reply PM
+//http://posiden.s1.jcink.com
+if("Pages" == "Msg" && "<!-- |input_CODE| -->" == "03" && "<!-- |input_MSID| -->" != ""){
+var messageID = "<!-- |input_MSID| -->";
+var membersID = "-";
+var messageTitle = "";
+var ucpdivs = document.getElementById("ucpcontent").getElementsByTagName("div");
+for(var i = 0; i < ucpdivs.length; i++){
+if(ucpdivs[i].className == "pformstrip"){
+messageTitle = ucpdivs[i].innerHTML;
+break;
+}
+}
+var ucplinks = document.getElementById("ucpcontent").getElementsByTagName("a");
+for(var i = 0; i < ucplinks.length; i++ ){
+if(ucplinks[i].href.match(/(showuser|MID)=([0-9]+)/) != null){
+membersID = RegExp.$2;
+break;
+}
+}
+ucpdivs[ucpdivs.length - 1].innerHTML = ucpdivs[ucpdivs.length - 1].innerHTML.replace(/\]/, "| <a href='#' onclick='if(document.getElementById(\"fastReplyPM\").style.display.match(/none/) != null){document.getElementById(\"fastReplyPM\").style.display = \"block\"}else{document.getElementById(\"fastReplyPM\").style.display = \"none\"}; return false;'>Fast Reply</a> ]")
+document.getElementById("ucpcontent").innerHTML += "<div id='fastReplyPM' style='display: none'><div class='tableborder'><div class='maintitle'>Fast Reply PM</div><div class='tablepad' style='text-align: center;'><form action='index.php' method='post'><input type='hidden' name='act' value='Msg' /><input type='hidden' name='CODE' value='04' /><input type='hidden' name='MODE' value='01' /><input type='hidden' name='OID' value='' /><input type='hidden' name='auth_key' value='880ea6a14ea49e853634fbdc5015a024' /><input type='hidden' name='from_contact' value='" + membersID + "' /><input type='hidden' name='msg_title' value='" + ((messageTitle.match(/Re:/i) == null) ? "Re: " + messageTitle : messageTitle ) + "' /><textarea cols='60' rows='7' name='Post' class='textinput'></textarea><br /><input type='submit' value='Send' /> <button onclick='if(document.getElementById(\"fastReplyPM\").style.display.match(/none/) != null){document.getElementById(\"fastReplyPM\").style.display = \"block\"}else{document.getElementById(\"fastReplyPM\").style.display = \"none\"}; return false;'>Cancel</button></form></div></div></div>";
+}
+
+</script>
+
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+<script>
+// Setting stuff for Forum Emblem Map
+
+   var contents = document.body.innerHTML;
+   contents = contents.replace(/ /g,"").replace(/\n/g,"").replace(/"/g,"").replace(/'/g,"");
+   var gameplaySelected = "<img src='http://i201.photobucket.com/albums/aa168/Dinfima/Point.gif' alt=''>";
+   gameplaySelected += "<a href='http://tebrigade.b1.jcink.com/index.php?showforum=73'>(FmEm) Gameplay</a></div>";
+   gameplaySelected = gameplaySelected.replace(/ /g,"").replace(/\n/g,"").replace(/"/g,"").replace(/'/g,"");
+ 
+   if(contents.indexOf(gameplaySelected) >= 0)
+   {
+	document.getElementById("ForumEmblemMapDisplay").style.display = "";
+	document.getElementById("displayMapDiv").style.display = "";
+
+	if("2" == "52" || "2" == "77" || "2" == "107")
+	{
+		document.getElementById("displayFEEditor").style.display = "";
+	}
+   }
+
+  /*
+  function expandMap()
+  {
+    $("#ForumEmblemMap").animate({
+        height: '600px'
+    }, 300);
+    document.getElementById("displayMapDiv").style.display = "none";
+    document.getElementById("hideMapDiv").style.display = "";
+  }
+  
+  function hideMap()
+  {
+    $("#ForumEmblemMap").animate({
+        height: '0px'
+    }, 300);
+    document.getElementById("displayMapDiv").style.display = "";
+    document.getElementById("hideMapDiv").style.display = "none";
+  }
+  */
+
+  function openMapInNewWindow()
+  {
+	window.open('http://tebrigade.b1.jcink.com/index.php?act=Pages&pid=14','ForumEmblemDisplay','width=1400,height=600,scrollbars=yes');
+  }
+
+  function openEditorInNewWindow()
+  {
+	window.open('http://tebrigade.b1.jcink.com/index.php?act=Pages&pid=12','ForumEmblemEditor','width=1400,height=600,scrollbars=yes');
+  }
+</script>
