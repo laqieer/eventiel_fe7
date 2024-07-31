@@ -571,7 +571,7 @@ function updateBlockLocks(raw_width,raw_height)
 				{
 					var newImg = document.createElement('img');
 					newImg.setAttribute('id',"lockedImg" + blockNum);
-					newImg.setAttribute('src',"https://dl.dropbox.com/u/71611130/BlockIcons/Locked.png");
+					newImg.setAttribute('src',"BlockIcons/Locked.png");
 					newImg.setAttribute('class',"minMaxImg");
 					var newHidden = document.createElement('input');
 					newHidden.setAttribute('id',"hd_lockedImg" + blockNum);
@@ -613,7 +613,7 @@ function loadSelectedMap()
 	var selVal = getSelectedOption(document.topUnitForm.mapSelection);
 	// Gets the value after the space in the dropdown list item
 	var mapIndex = mapIdDict[selVal].split(" ");
-	document.topUnitForm.hiddenMap.value = "https://dl.dropbox.com/u/71611130/ChapterMaps/" + mapIndex.pop() + ".png";
+	document.topUnitForm.hiddenMap.value = "ChapterMaps/" + mapIndex.pop() + ".png";
 	draw();
 	updateEventOutput();
 }
@@ -705,7 +705,7 @@ function changeMapSprite()
 	// Changes map sprite based on selected unit class
 	var classSprite = getSelectedOption(document.unitEditorForm.sel_class);
 	var alleg = getSelectedOption(document.unitEditorForm.sel_side);
-	//document.getElementById("MapSprite").src = "https://dl.dropbox.com/u/71611130/" + classSprite + alleg + ".png";
+	//document.getElementById("MapSprite").src = "" + classSprite + alleg + ".png";
 }
  */
  
@@ -1130,7 +1130,7 @@ function addEventAction(actionDataArray)
 		actionData += "  // <a href='javascript:setEventInsertionPoint(" + num + "," + eventNum + ");'>Insert Pt.</a>&nbsp;&nbsp;" +
 						"<a href='javascript:removeAction(" + num + "," + eventNum + ");'>Delete</a>" +
 						"<input type='hidden' id='hd_eventCode" + num + "' value='" + actionDataArray[1] + "'>";
-		actionData = "<img src='https://dl.dropbox.com/u/71611130/BlockIcons/SelectArrow.png'>" + actionData;
+		actionData = "<img src='BlockIcons/SelectArrow.png'>" + actionData;
 		newdiv.innerHTML = actionData;
 		// If no insertion point specified, append at end
 		if(insertPoint == "")
@@ -1232,7 +1232,7 @@ function setEventInsertionPoint(num, blockNum)
 function removeInsertionPointer(id)
 {
 	var prevDivContent = "" + document.getElementById(id).innerHTML;
-	document.getElementById(id).innerHTML = prevDivContent.replace("<img src=\"https://dl.dropbox.com/u/71611130/BlockIcons/SelectArrow.png\">","");
+	document.getElementById(id).innerHTML = prevDivContent.replace("<img src=\"BlockIcons/SelectArrow.png\">","");
 }
 
 /* Sets the insertion pointer icon in front of the specified event
@@ -1242,7 +1242,7 @@ function removeInsertionPointer(id)
  */
 function setInsertionPointer(id)
 {
-	document.getElementById(id).innerHTML = "<img src=\"https://dl.dropbox.com/u/71611130/BlockIcons/SelectArrow.png\">" +
+	document.getElementById(id).innerHTML = "<img src=\"BlockIcons/SelectArrow.png\">" +
 											document.getElementById(id).innerHTML;
 }
 
@@ -1412,7 +1412,7 @@ function setImgPos(num, mapSpriteDict)
   }
   else
 	imgClass = "Generic";
-  imageUrl = "https://dl.dropbox.com/u/71611130/MapSprites/" + imgClass + alleg + ".png";
+  imageUrl = "MapSprites/" + imgClass + alleg + ".png";
   img.src = imageUrl;
   img.style.position = "absolute";
   img.style.left = (x_st*16) + "px";
@@ -1438,13 +1438,13 @@ function hideUnitList(num,hide)
 	{
 		document.getElementById(listid).style.display = "none";
 		document.getElementById(endid).style.display = "none";
-		document.getElementById(imgid).src = "https://dl.dropbox.com/u/71611130/BlockIcons/Maximize.png";
+		document.getElementById(imgid).src = "BlockIcons/Maximize.png";
 	}
 	else
 	{
 		document.getElementById(listid).style.display = "";
 		document.getElementById(endid).style.display = "";
-		document.getElementById(imgid).src = "https://dl.dropbox.com/u/71611130/BlockIcons/Minimize.png";
+		document.getElementById(imgid).src = "BlockIcons/Minimize.png";
 	}	
 }
 
@@ -1467,12 +1467,12 @@ function toggleEventBlock(id)
 	if(isHidden != "none")
 	{
 		document.getElementById(listid).style.display = "none";
-		document.getElementById(imgid).src = "https://dl.dropbox.com/u/71611130/BlockIcons/Maximize.png";
+		document.getElementById(imgid).src = "BlockIcons/Maximize.png";
 	}
 	else
 	{
 		document.getElementById(listid).style.display = "";
-		document.getElementById(imgid).src = "https://dl.dropbox.com/u/71611130/BlockIcons/Minimize.png";
+		document.getElementById(imgid).src = "BlockIcons/Minimize.png";
 	}
 }
 
@@ -1491,7 +1491,7 @@ function toggleInvisibleArrows(num)
 			document.getElementById("moveImg" + num + "_" + i).style.display = visibilityStyle;
 	}
 	var visibility = (isVisible)?("Visible"):("Invisible");
-	document.getElementById(visId).src = "https://dl.dropbox.com/u/71611130/BlockIcons/" + visibility + ".png";
+	document.getElementById(visId).src = "BlockIcons/" + visibility + ".png";
 }
 
 function toggleInvisibleUnits(num)
@@ -1501,7 +1501,7 @@ function toggleInvisibleUnits(num)
 	var isVisible = (imgSrc.indexOf("Invisible") >= 0);
 	var visibility = (isVisible)?("Visible"):("Invisible");
 	changeVisibilityOfUnitBlock(num,isVisible);
-	document.getElementById(visId).src = "https://dl.dropbox.com/u/71611130/BlockIcons/" + visibility + ".png";
+	document.getElementById(visId).src = "BlockIcons/" + visibility + ".png";
 }
 
 function changeVisibilityOfUnitBlock(num,isVisible)
@@ -1606,10 +1606,10 @@ function addBlock(type)
 	{
 		newdiv.innerHTML = "<div id='b_name" + num + "' class='b_name'>" + name + ":" +
 							"<a href='javascript:toggleBlock(" + num + ");'>" +
-							"<img src='https://dl.dropbox.com/u/71611130/BlockIcons/Minimize.png'" +
+							"<img src='BlockIcons/Minimize.png'" +
 							" id='minMaxImg" + num + "' class='minMaxImg'></a>" +
 							"<a href='javascript:toggleInvisibleUnits(" + num + ");'>" +
-							"<img src='https://dl.dropbox.com/u/71611130/BlockIcons/Visible.png'" +
+							"<img src='BlockIcons/Visible.png'" +
 							" id='visImg" + num + "' class='minMaxImg'></a></div>" +
 							"<div id='b_list" + num + "'> </div>" +
 							"<div id='b_end" + num + "'>UNIT</div>";
@@ -1618,7 +1618,7 @@ function addBlock(type)
 	{
 		newdiv.innerHTML = "<div id='e_name" + num + "' class='b_name'>" + name + ":" +
 						   "<a href='javascript:toggleEventBlock(" + num + ");'>" +
-						   "<img src='https://dl.dropbox.com/u/71611130/BlockIcons/Minimize.png'" +
+						   "<img src='BlockIcons/Minimize.png'" +
 						   " id='minMaxImgE" + num + "' class='minMaxImg'></a></div>" +
 						   "<div id='e_list" + num  + "'><div id='action-1_" + num + "'>" +
 						   "<a href='javascript:setEventInsertionPoint(-1," + num + ");'>Insert At Beginning</a>&nbsp;&nbsp;" +
@@ -1628,10 +1628,10 @@ function addBlock(type)
 	{
 		newdiv.innerHTML = "<div id='m_name" + num + "' class='b_name'>" + name + ":" +
 							"<a href='javascript:toggleEventBlock(" + num + ");'>" +
-						   "<img src='https://dl.dropbox.com/u/71611130/BlockIcons/Minimize.png'" +
+						   "<img src='BlockIcons/Minimize.png'" +
 						   " id='minMaxImgM" + num + "' class='minMaxImg'></a>" +
 						   "<a href='javascript:toggleInvisibleArrows(" + num + ");'>" +
-							"<img src='https://dl.dropbox.com/u/71611130/BlockIcons/Visible.png'" +
+							"<img src='BlockIcons/Visible.png'" +
 							" id='visImgM" + num + "' class='minMaxImg'></a></div>" +
 						   "<input type='hidden' id='manualMove" + num + "Id' value='0'>" +
 						   "<input type='hidden' id='manualMoveStart" + num + "' value='0,0'>" +
@@ -1642,7 +1642,7 @@ function addBlock(type)
 	{
 		newdiv.innerHTML = "<div id='s_name" + num + "' class='b_name'>" + name + ":" +
 						   "<a href='javascript:toggleEventBlock(" + num + ");'>" +
-						   "<img src='https://dl.dropbox.com/u/71611130/BlockIcons/Minimize.png'" +
+						   "<img src='BlockIcons/Minimize.png'" +
 						   " id='minMaxImgS" + num + "' class='minMaxImg'></a></div>" +
 						   "<div id='s_list" + num  + "'><div id='action-1_" + num + "'>" +
 						   "<a href='javascript:setScriptedFightInsertionPoint(-1," + num + ");'>Insert At Beginning</a></div></div>";
@@ -4521,7 +4521,7 @@ function addManualMovement(type, num)
 			var mapDiv = document.getElementById('manualMoveImgDiv');
 			var newImg = document.createElement('img');
 			var imgIdName = "moveImg" + blockNum + "_" + moveNum;
-			var imageUrl = "https://dl.dropbox.com/u/71611130/MoveArrows/" + color +"_" + direction + ".png";
+			var imageUrl = "MoveArrows/" + color +"_" + direction + ".png";
 			var imgStyle = "position:absolute; left:" + parseInt(mapX.value)*16 +
 							"px; top:" + parseInt(mapY.value)*16 + "px;";
 			var imgClick = "setManualMoveStartPos(" + mapX.value + "," + mapY.value + ");";
@@ -4717,7 +4717,7 @@ function toggleEventAfterExitingPrepScreen()
 		newdiv.setAttribute('id',divIdName);
 			newdiv.innerHTML = "<div id='e_name" + num + "' class='b_name'>" + name + ":" +
 							   "<a href='javascript:toggleEventBlock(" + num + ");'>" +
-							   "<img src='https://dl.dropbox.com/u/71611130/BlockIcons/Minimize.png'" +
+							   "<img src='BlockIcons/Minimize.png'" +
 							   " id='minMaxImgE" + num + "' class='minMaxImg'></a></div>" +
 							   "<div id='e_list" + num  + "'><div id='action-1_" + num + "'>" +
 							   "<a href='javascript:setEventInsertionPoint(-1," + num + ");'>Insert At Beginning</a>" +

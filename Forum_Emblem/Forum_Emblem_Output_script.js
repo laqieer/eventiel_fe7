@@ -372,7 +372,7 @@ function recursiveMoveAdder(num, x, y, move, side, max_x, max_y)
 		var newImg = document.createElement('img');
 		newImg.setAttribute('style', "position:absolute; left:" + x*16 + "px;" + "top:" + y*16 + "px;");
 		var className = "MoveRange move" + num;
-		newImg.setAttribute('src', "https://dl.dropboxusercontent.com/u/71611130/Forum_Emblem/" + side + "_move.png");
+		newImg.setAttribute('src', "Forum_Emblem/" + side + "_move.png");
 		newImg.setAttribute('class', className);
 		moveDiv.appendChild(newImg);
 		return true;
@@ -420,7 +420,7 @@ function addNewRangeSection(num, x, y, move, i, side, max_x, max_y, unitNum)
 		var newImg = document.createElement('img');
 		newImg.setAttribute('style', "position:absolute; left:" + new_x + "px;" + "top:" + new_y + "px;");
 		var className = "MoveRange move" + unitNum;
-		newImg.setAttribute('src', "https://dl.dropboxusercontent.com/u/71611130/Forum_Emblem/" + side + "_move.png");
+		newImg.setAttribute('src', "Forum_Emblem/" + side + "_move.png");
 		newImg.setAttribute('class', className);
 		newImg.setAttribute('onclick', "getMapCoord(event);");
 		newImg.setAttribute('oncontextmenu',"clearAllMovementRanges(); clearSelectedInputs(); return false;");
@@ -827,7 +827,7 @@ function getBasicCharData(cut1)
 {
 	// Parse raw unit code
 	var character = cut1[0];
-	var charPortrait = "https://dl.dropboxusercontent.com/u/71611130/Forum_Emblem/Unknown.png";
+	var charPortrait = "Forum_Emblem/Unknown.png";
 	var u_class = cut1[1];
 	
 	var side = cut1[2];
@@ -840,7 +840,7 @@ function getBasicCharData(cut1)
 		if(classMug != null)
 			charPortrait = "http://www.feplanet.net/media/sprites/7/portraits/classes/" + classMug + ".gif";
 		else
-			charPortrait = "https://dl.dropboxusercontent.com/u/71611130/Forum_Emblem/SpecialClass.png";
+			charPortrait = "Forum_Emblem/SpecialClass.png";
 	}
 	
 	var lvlHpExp = cut1[5].replace("[","").replace("]","").replace(" ","").split(",");
@@ -1038,7 +1038,7 @@ function getWeaponRankList(cut1, itemList)
 function setItemData(contents, itemList)
 {
 	/*******EDIT THIS PLEASE
-	Lyn LynLord https://dl.dropbox.com/u/71611130/MapSprites/LynLordAlly.png [0,0] [1,1,1] [1,1,1,1,1,1,1,1,1] [E,E,E,E,E,E,E] [SlimSword,SilverSword,LanceReaver,RuneSword,LightBrand] [Astra,Luna,Sol]
+	Lyn LynLord MapSprites/LynLordAlly.png [0,0] [1,1,1] [1,1,1,1,1,1,1,1,1] [E,E,E,E,E,E,E] [SlimSword,SilverSword,LanceReaver,RuneSword,LightBrand] [Astra,Luna,Sol]
 	
 	******/
 	// Parse raw unit code
@@ -1572,7 +1572,7 @@ function addEventAction(actionDataArray)
 		actionData += "  // <a href='javascript:setEventInsertionPoint(" + num + "," + eventNum + ");'>Insert Pt.</a>&nbsp;&nbsp;" +
 						"<a href='javascript:removeAction(" + num + "," + eventNum + ");'>Delete</a>" +
 						"<input type='hidden' id='hd_eventCode" + num + "' value='" + actionDataArray[1] + "'>";
-		actionData = "<img src='https://dl.dropbox.com/u/71611130/BlockIcons/SelectArrow.png'>" + actionData;
+		actionData = "<img src='BlockIcons/SelectArrow.png'>" + actionData;
 		newdiv.innerHTML = actionData;
 		if(insertPoint == "")
 			parent.appendChild(newdiv);
@@ -1635,12 +1635,12 @@ function setEventInsertionPoint(num, blockNum)
 function removeInsertionPointer(id)
 {
 	var prevDivContent = "" + document.getElementById(id).innerHTML;
-	document.getElementById(id).innerHTML = prevDivContent.replace("<img src=\"https://dl.dropbox.com/u/71611130/BlockIcons/SelectArrow.png\">","");
+	document.getElementById(id).innerHTML = prevDivContent.replace("<img src=\"BlockIcons/SelectArrow.png\">","");
 }
 
 function setInsertionPointer(id)
 {
-	document.getElementById(id).innerHTML = "<img src=\"https://dl.dropbox.com/u/71611130/BlockIcons/SelectArrow.png\">" +
+	document.getElementById(id).innerHTML = "<img src=\"BlockIcons/SelectArrow.png\">" +
 											document.getElementById(id).innerHTML;
 }
 
@@ -1727,7 +1727,7 @@ function setImgPos(num, raw_contents, charList)
 	  }
 	  else
 		imgClass = "Generic";
-	  imgUrl = "https://dl.dropbox.com/u/71611130/MapSprites/" + imgClass + side + ".png";
+	  imgUrl = "MapSprites/" + imgClass + side + ".png";
   }
   else if(sprite == "CharacterSprite")
   {
@@ -1772,13 +1772,13 @@ function hideUnitList(num,hide)
 	{
 		document.getElementById(listid).style.display = "none";
 		document.getElementById(endid).style.display = "none";
-		document.getElementById(imgid).src = "https://dl.dropbox.com/u/71611130/BlockIcons/Maximize.png";
+		document.getElementById(imgid).src = "BlockIcons/Maximize.png";
 	}
 	else
 	{
 		document.getElementById(listid).style.display = "";
 		document.getElementById(endid).style.display = "";
-		document.getElementById(imgid).src = "https://dl.dropbox.com/u/71611130/BlockIcons/Minimize.png";
+		document.getElementById(imgid).src = "BlockIcons/Minimize.png";
 	}	
 }
 
@@ -1801,12 +1801,12 @@ function toggleEventBlock(id)
 	if(isHidden != "none")
 	{
 		document.getElementById(listid).style.display = "none";
-		document.getElementById(imgid).src = "https://dl.dropbox.com/u/71611130/BlockIcons/Maximize.png";
+		document.getElementById(imgid).src = "BlockIcons/Maximize.png";
 	}
 	else
 	{
 		document.getElementById(listid).style.display = "";
-		document.getElementById(imgid).src = "https://dl.dropbox.com/u/71611130/BlockIcons/Minimize.png";
+		document.getElementById(imgid).src = "BlockIcons/Minimize.png";
 	}
 }
 
@@ -1817,7 +1817,7 @@ function toggleInvisibleUnits(num)
 	var isVisible = (imgSrc.indexOf("Invisible") >= 0);
 	var visibility = (isVisible)?("Visible"):("Invisible");
 	changeVisibilityOfUnitBlock(num,isVisible);
-	document.getElementById(visId).src = "https://dl.dropbox.com/u/71611130/BlockIcons/" + visibility + ".png";
+	document.getElementById(visId).src = "BlockIcons/" + visibility + ".png";
 }
 
 function removeItemFromArray(item, array)
